@@ -1,0 +1,37 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login with QR Code</title>
+    <script>
+        // 检查登录状态的URL
+        const CHECK_STATUS_URL = '/check-login-status.php';
+
+        // 检查登录状态的间隔时间（毫秒）
+        const CHECK_INTERVAL = 2000;
+
+        function checkLoginStatus() {
+            fetch(CHECK_STATUS_URL)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.logged_in) {
+                        window.location.href = data.redirect_url;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error checking login status:', error);
+                });
+        }
+
+        // 页面加载完成后开始检查登录状态
+        window.onload = () => {
+            setInterval(checkLoginStatus, CHECK_INTERVAL);
+        };
+    </script>
+</head>
+<body>
+<!-- 显示二维码 -->
+<img src="/server.php" alt="Scan to Login">
+</body>
+</html>
